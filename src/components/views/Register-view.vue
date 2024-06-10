@@ -51,35 +51,40 @@ import { ref, computed } from 'vue'
 
 export default {
   setup() {
+    // Definiowanie reaktywnego obiektu student, który przechowuje dane formularza
     const student = ref({
       index: '',
       email: '',
       password: ''
     })
 
+    // Definiowanie reaktywnego obiektu errors, który przechowuje komunikaty błędów walidacji
     const errors = ref({
       index: '',
       email: '',
       password: ''
     })
 
+    // Obliczana właściwość, która zwraca długość wprowadzonego numeru indeksu w formacie "aktualna długość/6"
     const indexCount = computed(() => {
       return `${student.value.index.length}/6`
     })
 
+    // Metoda walidująca numer indeksu, usuwająca niecyfrowe znaki i ograniczająca jego długość do 6 cyfr
     function validateIndex() {
-      student.value.index = student.value.index.replace(/\D/g, '') // Remove non-digits
+      student.value.index = student.value.index.replace(/\D/g, '') // replace(/\D/g, '') Usuwa znaki inne niż cyfry
       if (student.value.index.length > 6) {
-        student.value.index = student.value.index.slice(0, 6) // Limit to 6 digits
+        student.value.index = student.value.index.slice(0, 6) // Ogranicza długość do 6 cyfr
       }
     }
 
+    // Metoda walidująca dane formularza i rejestrująca studenta, jeśli dane są poprawne
     function submitForm() {
       let valid = true
-      // Reset errors
+      // Resetowanie błędów walidacji
       errors.value = { index: '', email: '', password: '' }
 
-      // Validation checks
+      // Sprawdzanie poprawności danych
       if (!student.value.index || student.value.index.length !== 6) {
         errors.value.index = 'Index must be exactly 6 digits.'
         valid = false
@@ -93,19 +98,39 @@ export default {
         valid = false
       }
 
+      // Jeśli dane są poprawne, rejestrowanie studenta (w tym przypadku wyświetlanie danych w konsoli) i resetowanie formularza
       if (valid) {
         console.log('Rejestrowanie studenta:', student.value)
         resetForm()
       }
     }
 
+    // Metoda resetująca wartości pól formularza
     function resetForm() {
       student.value.index = ''
       student.value.email = ''
       student.value.password = ''
     }
 
+    // Zwracanie zmiennych i metod, aby były dostępne w szablonie
     return { student, errors, indexCount, submitForm, validateIndex }
   }
 }
 </script>
+
+<style scoped>
+.centered-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Sprawia, że zawartość jest wyśrodkowana pionowo i poziomo */
+}
+.formik {
+  max-width: 400px;
+  width: 100%;
+}
+.SignIn {
+  text-align: center;
+  margin-bottom: 20px;
+}
+</style>

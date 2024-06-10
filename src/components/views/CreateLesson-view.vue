@@ -1,6 +1,7 @@
 <template>
   <div class="create-lesson">
     <h2>Create Lesson</h2>
+    <!-- nasluchiwanie zdarzenia subimt i wywolania metody create leesson -->
     <form @submit.prevent="createLesson">
       <div class="form-group">
         <label for="title">Lesson Title</label>
@@ -21,6 +22,7 @@
 
 <script>
 export default {
+  // Zdefiniowanie danych komponentu
   data() {
     return {
       title: '',
@@ -29,25 +31,30 @@ export default {
     }
   },
   methods: {
+    // Metoda tworząca nową lekcję
     createLesson() {
       const lesson = {
-        title: this.title,
-        description: this.description,
-        timestamp: new Date().toLocaleString()
+        title: this.title, // Przypisanie tytułu lekcji
+        description: this.description, // Przypisanie opisu lekcji
+        timestamp: new Date().toLocaleString() // Ustawienie aktualnego czasu
       }
+      // Wyemitowanie zdarzenia 'add-lesson' z nową lekcją jako argument
       this.$emit('add-lesson', lesson)
-      // Reset form fields
+      // Resetowanie pól formularza
       this.title = ''
       this.description = ''
       this.timestamp = new Date().toLocaleString()
+      // Przekierowanie użytkownika do widoku lekcji
       this.$router.push('/lessons')
     },
+    // Metoda aktualizująca czas co sekundę
     updateTimestamp() {
       setInterval(() => {
         this.timestamp = new Date().toLocaleString()
       }, 1000)
     }
   },
+  // Wywołanie metody updateTimestamp po zamontowaniu komponentu
   mounted() {
     this.updateTimestamp()
   }
